@@ -1,0 +1,45 @@
+############################################
+# Script for Siril 0.9.9
+# Juin 2018
+# (C) Cyril Richard
+# Adapted, modified by Colmic, Sébastien Guyader and Piotr Smolarz
+# 
+# 
+# 
+# 
+# This script requires 3 folders to work
+# in the work directory:
+# bias, darks, flats
+#
+############################################
+
+##
+## START OF MASTERS PROCESSING
+##
+
+setext fits
+
+#Generating the master-bias
+cd Bias
+#convertraw bias_
+stack Bias_ rej 4 3 -nonorm -out=../mbias.fits
+cd ..
+
+cd Flat
+#Preprocessing the flats
+#convertraw flat_
+preprocess Flat_ -bias=../mbias.fits
+
+#Generating the master-flat
+stack pp_Flat_ rej 4 3 -norm=mul -out=../mflat.fits
+cd ..
+
+#Generating the master-dark
+cd Dark
+#convertraw dark_
+stack Dark_ rej 4 3 -nonorm -out=../mdark.fits
+cd ..
+
+##
+## END OF MASTERS PROCESSING
+##
